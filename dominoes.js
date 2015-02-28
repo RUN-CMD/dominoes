@@ -11,12 +11,12 @@ function getParameterDefinitions() {
 
 function main(params) {
 
-  function Domino() {
+  function Domino(topNumber, bottomNumber) {
 
     return union(
         DominoBody(),
-        Dots(DotLayout(1) ),
-        Dots(DotLayout(2) ).translate([-48, 0, 0])
+        Dots(DotLayout(topNumber) ),
+        Dots(DotLayout(bottomNumber) ).mirroredX()
     );
   }
 
@@ -130,7 +130,7 @@ function main(params) {
     });
   }
 
-  return Domino();
+  return Domino(6, 5);
   
 }
 
