@@ -13,19 +13,67 @@ function main(params) {
 
   function Domino() {
 
-    var topLeft     = function() { return [36,11,0]; };
-    var center      = function() { return [24,0,0]; };
-    var topRight    = function() { return [36,-11,0]; };
-    var bottomLeft  = function() { return [12,11,0]; };
-    var bottomRight = function() { return [12,-11,0]; };
-
     return union(
         DominoBody(),
-        Dot(topLeft),
-        Dot(center),
-	Dot(topRight),
-        Dot(bottomLeft),
-        Dot(bottomRight)
+        Dots(DotLayout(1) ),
+        Dots(DotLayout(2) ).translate([-48, 0, 0])
+    );
+  }
+
+  function DotLayout(dotCount) {
+
+    var topLeft      = function() { return [36,11,0]; };
+    var topCenter    = function() { return [36,0,0]; };
+    var topRight     = function() { return [36,-11,0]; };
+    var centerLeft   = function() { return [24,11,0]; };
+    var center       = function() { return [24,0,0]; };
+    var centerRight  = function() { return [24,-11,0]; };
+    var bottomLeft   = function() { return [12,11,0]; };
+    var bottomCenter = function() { return [12,0,0]; };
+    var bottomRight  = function() { return [12,-11,0]; };
+
+    var dots = [
+      // 0
+      [],
+
+      // 1
+      [center],
+
+      // 2
+      [bottomLeft, topRight],
+
+      // 3
+      [bottomLeft, center, topRight],
+
+      // 4
+      [topLeft, topRight, bottomLeft, bottomRight],
+
+      // 5
+      [topLeft, topRight, center, bottomLeft, bottomRight],
+
+      // 6
+      [topLeft, topRight, centerLeft, centerRight, bottomLeft, bottomRight],
+
+      // 7
+      [topLeft, topRight, centerLeft, center, centerRight, bottomLeft, bottomRight],
+
+      // 8
+      [topLeft, topCenter, topRight, centerLeft, centerRight, bottomLeft, bottomCenter, bottomRight],
+
+      // 9
+      [topLeft, topCenter, topRight, centerLeft, center, centerRight, bottomLeft, bottomCenter, bottomRight]
+    ];
+
+    return dots[dotCount];
+  }
+
+  function Dots(dotLayout) {
+
+    return dotLayout.reduce(
+      function(prev, curr, idx, arr) {
+        return union(prev, Dot(curr) );
+      },
+      Dot(dotLayout[0])
     );
   }
 
