@@ -17,7 +17,7 @@ function main(params) {
 
   function Domino(topNumber, bottomNumber) {
 
-    return union(
+    return difference(
         DominoBody(),
         Dots(DotLayout(topNumber) ),
         Dots(DotLayout(bottomNumber) ).mirroredX()
@@ -102,26 +102,26 @@ function main(params) {
     }
 
     function Eye() {
-      return CSG.cube({radius: 1}).setColor(0,0,0);
+      return CSG.cube({radius: [1,1,5]}).setColor(0,0,0);
     }
 
     function Mouth() {
       return union(
-          CSG.cube({radius: [1.5,1,1]}).setColor(0,0,0),          
-          CSG.cube({radius: [1.5,0.5,1]}).
+          CSG.cube({radius: [1.5,1,5]}).setColor(0,0,0),          
+          CSG.cube({radius: [1.5,0.5,5]}).
             setColor(0,0,0).
             translate([-1,1.5,0]),
-          CSG.cube({radius: [1.5,0.5,1]}).
+          CSG.cube({radius: [1.5,0.5,5]}).
             setColor(0,0,0).
             translate([-1,-1.5,0])
       );
     }
 
-    return union(
+    return difference(
       Noggin(), 
-      Eye().translate([2,2,3]), 
-      Eye().translate([2,-2,3]), 
-      Mouth().translate([-1,0,3])
+      Eye().translate([2,2,0]), 
+      Eye().translate([2,-2,0]), 
+      Mouth().translate([-1,0,0])
     );
   }
 
