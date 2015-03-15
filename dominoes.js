@@ -1,14 +1,19 @@
 
 function getParameterDefinitions() {
   return [
-    { name: 'family', type: 'int', initial: 1, caption: "All dominos generated will contain this number" },
-    { name: 'count', type: 'int', initial: 1, caption: "Will generate 0-N of the family" },
-    { name: 'rounded', type: 'choice', caption: 'Round the corners?',
-      values: [0, 1], captions: ["No thanks", "Yes please"], initial: 1 }
+    { name: 'family', type: 'int', initial: 4, caption: "*family* (all dominos generated will contain this number)" },
+    { name: 'upto', type: 'int', initial: 6, caption: "*upto* (will generate 0-N of the family)" }
   ];
 }
 
+function validate(params) {
+  if (params.family < 0 || params.family > 9) throw new Error("Family must be 0-9");
+  if (params.upto < 0 || params.upto > 9)     throw new Error("Upto must be 0-9");
+}
+
 function main(params) {
+
+  validate(params);
 
   function Domino(topNumber, bottomNumber) {
 
@@ -148,5 +153,5 @@ function main(params) {
     }
   }
 
-  return DominoSet(2, 7);
+  return DominoSet(params.family, params.upto);
 }
