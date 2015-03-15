@@ -3,7 +3,8 @@ function getParameterDefinitions() {
   return [
     { name: 'family', type: 'int', initial: 4, caption: "*family* (all dominos generated will contain this number)" },
     { name: 'from', type: 'int', initial: 5, caption: "*from* (will generate 0-N of the family)" },
-    { name: 'upto', type: 'int', initial: 6, caption: "*upto* (will generate 0-N of the family)" }
+    { name: 'upto', type: 'int', initial: 6, caption: "*upto* (will generate 0-N of the family)" },
+    { name: 'render', type: 'choice', caption: 'Render Selection', values: ['all', 'body', 'dots'], captions: ["All", "Bodys", "Dots"], initial: 'all' }
   ];
 }
 
@@ -18,6 +19,29 @@ function main(params) {
   validate(params);
 
   function Domino(topNumber, bottomNumber) {
+
+    return difference(
+        DominoBody(),
+        Dots(CreeperHead, DotLayout(topNumber) ),
+        Dots(CreeperHead, DotLayout(bottomNumber) ).mirroredX()
+    );
+  }
+
+  function DominoStrategy(topNumber, bottomNumber) {
+
+    return Domino(topNumber, bottomNumber);
+  }
+
+  function DominoBodyStrategy(topNumber, bottomNumber) {
+
+    return difference(
+        DominoBody(),
+        Dots(Noggin, DotLayout(topNumber) ),
+        Dots(Noggin, DotLayout(bottomNumber) ).mirroredX()
+    );
+  }
+
+  function DominoDotsStrategy(topNumber, bottomNumber) {
 
     return difference(
         DominoBody(),
@@ -73,7 +97,7 @@ function main(params) {
     return dots[dotCount];
   }
 
-  function Dots(dotLayout) {
+  function Dots(model, dotLayout) {
 
     if (dotLayout.length == 0) {
       // TODO find an openjscad null object that is compatible with union()
@@ -82,15 +106,15 @@ function main(params) {
 
     return dotLayout.reduce(
       function(prev, curr, idx, arr) {
-        return union(prev, Dot(curr) );
+        return union(prev, Dot(model, curr) );
       },
-      Dot(dotLayout[0])
+      Dot(model, dotLayout[0])
     );
   }
 
-  function Dot(position) {
+  function Dot(model, position) {
 
-    return CreeperHead().translate(position() ).translate([0, 0, 2.5]);
+    return model().translate(position() ).translate([0, 0, 2.5]);
   }
 
   function CreeperHead() {
@@ -155,5 +179,19 @@ function main(params) {
     }
   }
 
-  return DominoSet(params.family, params.from, params.upto);
+  function dominoTypeFromRenderType(render) {
+
+    switch(render) {
+      case 'body': return DominoBodyStrategy;
+      case 'dots': return DominoDotsStrategy;
+      else return DominoStrategy;
+    }
+  }
+
+  return DominoSet(
+    params.family,
+    params.from,
+    params.upto,
+    dominoTypeFromRenderType(params.render)
+  );
 }
