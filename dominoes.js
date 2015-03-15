@@ -28,15 +28,15 @@ function main(params) {
 
   function DotLayout(dotCount) {
 
-    var topLeft      = function() { return [36,11,0]; };
-    var topCenter    = function() { return [36,0,0]; };
-    var topRight     = function() { return [36,-11,0]; };
-    var centerLeft   = function() { return [24,11,0]; };
-    var center       = function() { return [24,0,0]; };
-    var centerRight  = function() { return [24,-11,0]; };
-    var bottomLeft   = function() { return [12,11,0]; };
-    var bottomCenter = function() { return [12,0,0]; };
-    var bottomRight  = function() { return [12,-11,0]; };
+    var topLeft      = function() { return [18, 5.5, 0]; };
+    var topCenter    = function() { return [18, 0, 0]; };
+    var topRight     = function() { return [18, -5.5, 0]; };
+    var centerLeft   = function() { return [12, 5.5, 0]; };
+    var center       = function() { return [12, 0, 0]; };
+    var centerRight  = function() { return [12, -5.5, 0]; };
+    var bottomLeft   = function() { return [6, 5.5, 0]; };
+    var bottomCenter = function() { return [6, 0, 0]; };
+    var bottomRight  = function() { return [6, -5.5, 0]; };
 
     var dots = [
       // 0
@@ -90,40 +90,40 @@ function main(params) {
 
   function Dot(position) {
 
-    return CreeperHead().translate(position() ).translate([0,0,5]);
+    return CreeperHead().translate(position() ).translate([0, 0, 2.5]);
   }
 
   function CreeperHead() {
 
     function Noggin() {
       return CSG.cube({
-        radius: [5,5,3.5],
+        radius: [2.5, 2.5, 1.75],
         roundradius: 1,
         resolution: 16
       }).setColor(0,0.5,0);
     }
 
     function Eye() {
-      return CSG.cube({radius: [1,1,5]}).setColor(0,0,0);
+      return CSG.cube({radius: [0.5, 0.5, 2.5]}).setColor(0,0,0);
     }
 
     function Mouth() {
       return union(
-          CSG.cube({radius: [1.5,1,5]}).setColor(0,0,0),          
-          CSG.cube({radius: [1.5,0.5,5]}).
+          CSG.cube({radius: [0.75, 0.5, 2.5]}).setColor(0,0,0),          
+          CSG.cube({radius: [0.75, 0.25, 2.5]}).
             setColor(0,0,0).
-            translate([-1,1.5,0]),
-          CSG.cube({radius: [1.5,0.5,5]}).
+            translate([-0.5, 0.75, 0]),
+          CSG.cube({radius: [0.75, 0.25, 2.5]}).
             setColor(0,0,0).
-            translate([-1,-1.5,0])
+            translate([-0.5, -0.75, 0])
       );
     }
 
     return difference(
       Noggin(), 
-      Eye().translate([2,2,0]), 
-      Eye().translate([2,-2,0]), 
-      Mouth().translate([-1,0,0])
+      Eye().translate([1, 1, 0]),
+      Eye().translate([1, -1, 0]),
+      Mouth().translate([-0.5, 0, 0])
     );
   }
 
@@ -131,7 +131,7 @@ function main(params) {
 
     return CSG.roundedCube({
       center: [0, 0, 0],
-      radius: [48,21,5],
+      radius: [24, 10.5, 2.5],
       roundradius: 1,
       resolution: 16
     });
@@ -143,8 +143,8 @@ function main(params) {
       return union(
         Domino(family, upto).translate(
           [
-            -1 * Math.floor(upto / 5) * 120,
-            -1 * (upto % 5) * 50,
+            -1 * Math.floor(upto / 5) * 60,
+            -1 * (upto % 5) * 25,
             0
           ]
         ),
