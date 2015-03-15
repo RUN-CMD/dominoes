@@ -141,8 +141,8 @@ function main(params) {
       return union(
         Domino(family, upto).translate(
           [
-            Math.floor(upto / 5) * 120,
-            (upto % 5) * 50,
+            -1 * Math.floor(upto / 5) * 120,
+            -1 * (upto % 5) * 50,
             0
           ]
         ),
