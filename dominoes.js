@@ -2,12 +2,14 @@
 function getParameterDefinitions() {
   return [
     { name: 'family', type: 'int', initial: 4, caption: "*family* (all dominos generated will contain this number)" },
+    { name: 'from', type: 'int', initial: 5, caption: "*from* (will generate 0-N of the family)" },
     { name: 'upto', type: 'int', initial: 6, caption: "*upto* (will generate 0-N of the family)" }
   ];
 }
 
 function validate(params) {
   if (params.family < 0 || params.family > 9) throw new Error("Family must be 0-9");
+  if (params.from < 0 || params.from > 9)     throw new Error("From must be 0-9");
   if (params.upto < 0 || params.upto > 9)     throw new Error("Upto must be 0-9");
 }
 
@@ -135,9 +137,9 @@ function main(params) {
     });
   }
 
-  function DominoSet(family, upto) {
+  function DominoSet(family, from, upto) {
 
-    if (upto > 0) {
+    if (upto > from) {
       return union(
         Domino(family, upto).translate(
           [
@@ -146,12 +148,12 @@ function main(params) {
             0
           ]
         ),
-        DominoSet(family, upto - 1)
+        DominoSet(family, upto - 1, from)
       );
     } else {
-      return Domino(family, 0);
+      return Domino(family, from);
     }
   }
 
-  return DominoSet(params.family, params.upto);
+  return DominoSet(params.family, params.from, params.upto);
 }
