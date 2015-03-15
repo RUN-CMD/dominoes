@@ -1,5 +1,4 @@
 
-
 function getParameterDefinitions() {
   return [
     { name: 'family', type: 'int', initial: 1, caption: "All dominos generated will contain this number" },
@@ -87,7 +86,6 @@ function main(params) {
     return CreeperHead().translate(position() ).translate([0,0,5]);
   }
 
-
   function CreeperHead() {
 
     function Noggin() {
@@ -122,9 +120,6 @@ function main(params) {
     );
   }
 
-
-
-
   function DominoBody() {
 
     return CSG.roundedCube({
@@ -135,7 +130,23 @@ function main(params) {
     });
   }
 
-  return Domino(6, 5);
-  
-}
+  function DominoSet(family, upto) {
 
+    if (upto > 0) {
+      return union(
+        Domino(family, upto).translate(
+          [
+            Math.floor(upto / 5) * 120,
+            (upto % 5) * 50,
+            0
+          ]
+        ),
+        DominoSet(family, upto - 1)
+      );
+    } else {
+      return Domino(family, 0);
+    }
+  }
+
+  return DominoSet(2, 7);
+}
