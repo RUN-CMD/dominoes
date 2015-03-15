@@ -69,6 +69,11 @@ function main(params) {
 
   function Dots(dotLayout) {
 
+    if (dotLayout.length == 0) {
+      // TODO find an openjscad null object that is compatible with union()
+      return CSG.cube({ radius: 0.0001 });
+    }
+
     return dotLayout.reduce(
       function(prev, curr, idx, arr) {
         return union(prev, Dot(curr) );
